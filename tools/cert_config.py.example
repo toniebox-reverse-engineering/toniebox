@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+box_client_certfile="client.crt"
+box_keyfile="private.key"
+
+ca_certfile="ca.crt"
+ca_keyfile="ca.key"
