@@ -1,25 +1,42 @@
 #!/usr/bin/env python3
 
 import socket
+from socket import AF_INET, SOCK_STREAM, SO_REUSEADDR, SOL_SOCKET, SHUT_RDWR
 import ssl
+
 from cert_config import *
 
-context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+context.verify_mode = ssl.CERT_NONE
 context.load_cert_chain(
-    certfile=ca_fake_certfile,
-    keyfile=ca_fake_keyfile
+    certfile=host_fake_certfile,
+    keyfile=host_fake_keyfile
 )
 context.load_verify_locations(cafile=box_client_certfile)
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0) as sock:
-    sock.bind(('0.0.0.0', 443))
-    sock.listen(5)
-    print("Start listening...")
-    while True:
-        print("Waiting for client...")
-        conn, addr = sock.accept()
-        print(conn)
-        sslsoc = context.wrap_socket(conn, server_side=True)
-        print(sslsoc)
-        sslsoc.write(b'GET / HTTP/1.1\n')
-        print("Data:", sslsoc.recv().decode())
+bindsocket = socket.socket()
+bindsocket.bind(("prod.de.tbs.toys", 443))
+bindsocket.listen(5)
+
+while True:
+    print("Waiting for client")
+    newsocket, fromaddr = bindsocket.accept()
+    print("Client connected: {}:{}".format(fromaddr[0], fromaddr[1]))
+    conn = context.wrap_socket(newsocket, server_side=True)
+    print("SSL established. Peer: {}".format(conn.getpeername()))
+    buf = b''  # Buffer to hold received client data
+    try:
+        while True:
+            data = conn.recv(4096)
+            if data:
+                # Client sent us data. Append to buffer
+                buf += data
+                print(data)
+            else:
+                # No more data from client. Show buffer and close connection.
+                #print("Received:", buf)
+                break
+    finally:
+        print("Closing connection")
+        conn.shutdown(socket.SHUT_RDWR)
+        conn.close()
