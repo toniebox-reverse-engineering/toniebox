@@ -1,9 +1,16 @@
 #!/usr/bin/env python3
 
-box_client_certfile="client.crt"
-box_keyfile="private.key"
+base_path = "/tmp/"
 
-box_certfile="ca.crt"
+box_client_certfile = base_path + "box_fake/client.cer"
+box_keyfile = base_path + "box_fake/private.key"
 
-host_fake_certfile="hostname.crt"
-host_fake_keyfile="hostname.key"
+ca_fake_pemfile = base_path + "fake/ca.pem"
+ca_fake_certfile = base_path + "fake/ca.cer"
+ca_fake_keyfile = base_path + "fake/ca.key"
+
+host_cert_dir = base_path + "fake_site_certs/hostcert/"
+
+host_fake_pemfile = host_cert_dir + "prod.de.tbs.toys.pem"
+host_fake_certfile = host_cert_dir + "prod.de.tbs.toys.cer"
+host_fake_keyfile = ca_fake_keyfile
