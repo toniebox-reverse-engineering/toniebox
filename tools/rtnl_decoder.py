@@ -59,16 +59,16 @@ class Data_Block:
                 f1, cursor = self.__parse_fixed64(data, cursor)
                 result += "\n\t\t1: %i" % (f1)
             elif field_id == 0x10: # 2
-                f2, cursor = self.__parse_variant(data, cursor)
+                f2, cursor = self.__parse_variant8(data, cursor)
                 result += "\n\t\t2: %i" % (f2)
             elif field_id == 0x18: # 3
-                f3, cursor = self.__parse_variant(data, cursor)
+                f3, cursor = self.__parse_variant8(data, cursor)
                 result += "\n\t\t3: %i" % (f3)
             elif field_id == 0x20: # 4
-                f4, cursor = self.__parse_variant(data, cursor)
+                f4, cursor = self.__parse_variant8(data, cursor)
                 result += "\n\t\t4: %i" % (f4)
             elif field_id == 0x28: # 5
-                f5, cursor = self.__parse_variant(data, cursor)
+                f5, cursor = self.__parse_variant16(data, cursor)
                 result += "\n\t\t5: %i" % (f5)
             elif field_id == 0x32: # 6
                 f6, cursor = self.__parse_string(data, cursor)
@@ -83,8 +83,10 @@ class Data_Block:
                 #result += "\n\t\t9: %s" % (f9)
         return result
 
-    def __parse_variant(self, data, cursor):
+    def __parse_variant8(self, data, cursor):
         return (int(data[cursor]), cursor+1)
+    def __parse_variant16(self, data, cursor):
+        return (struct.unpack('<h', data[cursor:cursor+2]), cursor+2)
     def __parse_fixed32(self, data, cursor):
         return (struct.unpack('<i', data[cursor:cursor+4]), cursor+4)
     def __parse_fixed64(self, data, cursor):
