@@ -78,9 +78,9 @@ class Data_Block:
             elif field_id == 0x45: # 8
                 f8, cursor = self.__parse_fixed32(data, cursor)
                 result += "\n\t\t8: %i" % (f8)
-            #elif field_id == 0x: # 9
-                #f9, cursor = self.__parse_string(data, cursor)
-                #result += "\n\t\t9: %s" % (f9)
+            elif field_id == 0x4A: # 9
+                f9, cursor = self.__parse_string(data, cursor)
+                result += "\n\t\t9: %s" % (f9)
         return result
 
     def __parse_variant8(self, data, cursor):
