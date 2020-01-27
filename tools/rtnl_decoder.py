@@ -53,37 +53,31 @@ class Data_Block:
         result = ""
         cursor = 0
         while cursor < len(data)-1:
-            field_id = data[cursor]
+            field_id = data[cursor]>>3
+            field_type = data[cursor]&0b00000111
             cursor += 1
-            if field_id == 0x09: # 1
-                f1, cursor = self.__parse_fixed64(data, cursor)
-                result += "\n\t\t1: %i" % (f1)
-            elif field_id == 0x10: # 2
-                f2, cursor = self.__parse_variant(data, cursor)
-                result += "\n\t\t2: %i" % (f2)
-            elif field_id == 0x18: # 3
-                f3, cursor = self.__parse_variant(data, cursor)
-                result += "\n\t\t3: %i" % (f3)
-            elif field_id == 0x20: # 4
-                f4, cursor = self.__parse_variant(data, cursor)
-                result += "\n\t\t4: %i" % (f4)
-            elif field_id == 0x28: # 5
-                f5, cursor = self.__parse_variant(data, cursor)
-                result += "\n\t\t5: %i" % (f5)
-            elif field_id == 0x32: # 6
-                f6, cursor = self.__parse_string(data, cursor)
-                result += "\n\t\t6: %s" % (f6)
-            #elif field_id == 0x: # 7
-                #continue
-            elif field_id == 0x45: # 8
-                f8, cursor = self.__parse_fixed32(data, cursor)
-                result += "\n\t\t8: %i" % (f8)
-            elif field_id == 0x4A: # 9
-                f9, cursor = self.__parse_string(data, cursor)
-                result += "\n\t\t9: %s" % (f9)
-            else:
-                result += "\n\t\tOTHER: %s(%i)" % (self.__as_hex(data[cursor]), cursor)
+
+            if cursor == 1 and field_type == 2 and data[cursor] == len(data)-2: #skip encapsuling string
                 cursor += 1
+                continue
+
+            if field_type == 0:
+                type_name = "Variant"
+                content, cursor = self.__parse_variant(data, cursor)
+            elif field_type == 1:
+                type_name = "Fixed64"
+                content, cursor = self.__parse_fixed64(data, cursor)
+            elif field_type == 2:
+                type_name = "String"
+                content, cursor = self.__parse_string(data, cursor)
+            elif field_type == 5:
+                type_name = "Fixed32"
+                content, cursor = self.__parse_fixed32(data, cursor)
+            else:
+                type_name = "Unknown"
+                logging.error("Unknown field_type %i" % (field_type))
+            
+            result += f"\n\t\t{field_id}({type_name}):\t{content}"
         return result
 
     def __set_bit(self, value, bit):
@@ -111,11 +105,11 @@ class Data_Block:
     def __parse_fixed8(self, data, cursor):
         return (int(data[cursor]), cursor+1)
     def __parse_fixed16(self, data, cursor):
-        return (struct.unpack('<h', data[cursor:cursor+2]), cursor+2)
+        return (struct.unpack('<h', data[cursor:cursor+2])[0], cursor+2)
     def __parse_fixed32(self, data, cursor):
-        return (struct.unpack('<i', data[cursor:cursor+4]), cursor+4)
+        return (struct.unpack('<i', data[cursor:cursor+4])[0], cursor+4)
     def __parse_fixed64(self, data, cursor):
-        return (struct.unpack('<q', data[cursor:cursor+8]), cursor+8)
+        return (struct.unpack('<q', data[cursor:cursor+8])[0], cursor+8)
     def __parse_string(self, data, cursor):
         length = data[cursor]
         cursor += 1
