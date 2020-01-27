@@ -18,7 +18,7 @@ parser.add_argument("file_path", type=Path, help="Path to raw toniebox protobuf 
 parser.add_argument("--output", dest="output_type", default="print", help="default=print, csv")
 
 p = parser.parse_args()
-print(p.file_path, type(p.file_path), p.file_path.exists())
+logging.info(p.file_path, type(p.file_path), p.file_path.exists())
 
 log_file = p.file_path
 logging.info("Decoding Toniebox bytestream...")
