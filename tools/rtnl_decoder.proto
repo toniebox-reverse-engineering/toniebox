@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+message RTNL_PROTOCOL_A {
+    fixed64 f1 = 1
+    int32 command_counter = 2
+    int32 f3 = 3
+    int32 f4 = 4
+    int32 f5 = 5
+    string payload = 6
+
+    fixed32 firmware_id = 8
+    string f9 = 9
+}
+message RTNL_PROTOCOL_B {
+    fixed32 f1 = 1
+    int32 f2 = 2
+}
