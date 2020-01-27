@@ -59,16 +59,16 @@ class Data_Block:
                 f1, cursor = self.__parse_fixed64(data, cursor)
                 result += "\n\t\t1: %i" % (f1)
             elif field_id == 0x10: # 2
-                f2, cursor = self.__parse_variant8(data, cursor)
+                f2, cursor = self.__parse_variant(data, cursor)
                 result += "\n\t\t2: %i" % (f2)
             elif field_id == 0x18: # 3
-                f3, cursor = self.__parse_variant8(data, cursor)
+                f3, cursor = self.__parse_variant(data, cursor)
                 result += "\n\t\t3: %i" % (f3)
             elif field_id == 0x20: # 4
-                f4, cursor = self.__parse_variant8(data, cursor)
+                f4, cursor = self.__parse_variant(data, cursor)
                 result += "\n\t\t4: %i" % (f4)
             elif field_id == 0x28: # 5
-                f5, cursor = self.__parse_variant16(data, cursor)
+                f5, cursor = self.__parse_variant(data, cursor)
                 result += "\n\t\t5: %i" % (f5)
             elif field_id == 0x32: # 6
                 f6, cursor = self.__parse_string(data, cursor)
@@ -81,11 +81,36 @@ class Data_Block:
             elif field_id == 0x4A: # 9
                 f9, cursor = self.__parse_string(data, cursor)
                 result += "\n\t\t9: %s" % (f9)
+            else:
+                result += "\n\t\tOTHER: %s(%i)" % (self.__as_hex(data[cursor]), cursor)
+                cursor += 1
         return result
 
-    def __parse_variant8(self, data, cursor):
+    def __set_bit(self, value, bit):
+        return value | (1<<bit)
+    def __clear_bit(self, value, bit):
+        return value & ~(1<<bit)
+
+    def __get_bit(self, value, bit):
+        return (value & (1<<bit)) >> bit
+
+    def __parse_variant(self, data, cursor):
+        number = 0
+        length = 0
+        while True: 
+            for i in range(7):
+                if self.__get_bit(data[cursor+length], i):
+                    number = number + (self.__set_bit(0, i+7*length))
+            if not self.__get_bit(data[cursor+length], 7) or length == 7:
+                break
+            length +=1
+
+        length +=1
+        return (number, cursor+length)
+
+    def __parse_fixed8(self, data, cursor):
         return (int(data[cursor]), cursor+1)
-    def __parse_variant16(self, data, cursor):
+    def __parse_fixed16(self, data, cursor):
         return (struct.unpack('<h', data[cursor:cursor+2]), cursor+2)
     def __parse_fixed32(self, data, cursor):
         return (struct.unpack('<i', data[cursor:cursor+4]), cursor+4)
