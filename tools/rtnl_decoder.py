@@ -18,8 +18,6 @@ parser.add_argument("file_path", type=Path, help="Path to raw toniebox protobuf 
 parser.add_argument("--output", dest="output_type", default="print", help="default=print, csv")
 
 p = parser.parse_args()
-logging.info(p.file_path, type(p.file_path), p.file_path.exists())
-
 log_file = p.file_path
 logging.info("Decoding Toniebox bytestream...")
 
@@ -100,7 +98,7 @@ class Data_Block:
         csv = ""
         for i in range(1, 10):
             if f"{i}" in result:
-                csv = csv + str(result[f"{i}"]["content"]).replace("\n", "XXX").replace("\r", "XXX") + ";" + result[f"{i}"]["raw"] + ";"
+                csv = csv + str(result[f"{i}"]["content"]).replace("\n", "\\n").replace("\r", "\\r").replace("\"", "") + ";" + result[f"{i}"]["raw"] + ";"
             else:
                 csv = csv + ";;"
         return csv
@@ -138,7 +136,7 @@ class Data_Block:
     def __parse_string(self, data, cursor):
         length = data[cursor]
         cursor += 1
-        return (data[cursor:cursor+length].decode("utf-8", "ignore"), cursor+length)
+        return (data[cursor:cursor+length].decode("latin-1", "ignore"), cursor+length)
         
 blocks = []
 
