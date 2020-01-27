@@ -14,7 +14,8 @@ FILE_MAGIC = bytearray([0x0D, 0x0A])
 BLOCK_MAGIC_END = bytearray([0x45 ,0x38 ,0x1D ,0xE9 ,0x5D])
 
 parser = argparse.ArgumentParser()
-parser.add_argument("file_path", type=Path)
+parser.add_argument("file_path", type=Path, help="Path to raw toniebox protobuf log")
+parser.add_argument("--output", dest="output_type", default="print", help="default=print, csv")
 
 p = parser.parse_args()
 print(p.file_path, type(p.file_path), p.file_path.exists())
@@ -47,11 +48,17 @@ class Data_Block:
 
     def __repr__(self):
         return "Data Block\n\tstart: %s\n\tend: %s\n\tdata_raw: %s\n\tdecode: %s" \
-        % (self.__as_hex(self.start), self.__as_hex(self.end), self.__hexify(self.data_raw), self.__decode_protobuf(self.data_raw))
+        % (self.__as_hex(self.start), self.__as_hex(self.end), self.__hexify(self.data_raw), self.decode_protobuf("print"))
 
-    def __decode_protobuf(self, data):
-        result = ""
+    def decode_protobuf(self, return_type=""):
+        data = self.data_raw
         cursor = 0
+
+        if return_type == "print":
+            result = ""
+        else:
+            result = {}
+
         while cursor < len(data)-1:
             field_id = data[cursor]>>3
             field_type = data[cursor]&0b00000111
@@ -60,7 +67,8 @@ class Data_Block:
             if cursor == 1 and field_type == 2 and data[cursor] == len(data)-2: #skip encapsuling string
                 cursor += 1
                 continue
-
+            
+            start = cursor
             if field_type == 0:
                 type_name = "Variant"
                 content, cursor = self.__parse_variant(data, cursor)
@@ -76,9 +84,26 @@ class Data_Block:
             else:
                 type_name = "Unknown"
                 logging.error("Unknown field_type %i" % (field_type))
-            
-            result += f"\n\t\t{field_id}({type_name}):\t{content}"
+            end = cursor
+
+            if return_type == "print":
+                result += f"\n\t\t{field_id}({type_name}):\t{content}"
+            else:
+                if f"{field_id}" in result:
+                    logging.warn(f"Field {field_id} declared multiple times")
+                result[f"{field_id}"] = {"field_id": field_id, "field_type": field_type, "type_name": type_name, "content": content, "raw": self.__hexify(data[start:end])}
+
         return result
+    
+    def generate_csv(self):
+        result = self.decode_protobuf()
+        csv = ""
+        for i in range(1, 10):
+            if f"{i}" in result:
+                csv = csv + str(result[f"{i}"]["content"]).replace("\n", "XXX").replace("\r", "XXX") + ";" + result[f"{i}"]["raw"] + ";"
+            else:
+                csv = csv + ";;"
+        return csv
 
     def __set_bit(self, value, bit):
         return value | (1<<bit)
@@ -115,9 +140,7 @@ class Data_Block:
         cursor += 1
         return (data[cursor:cursor+length].decode("utf-8", "ignore"), cursor+length)
         
-
-
-
+blocks = []
 
 # First block
 start = cursor
@@ -131,9 +154,7 @@ while cursor < len(data)-1:
         else:
             logging.error("b1 no 3x 0x00 after magic %#x %#x %#x" % (data[cursor], data[cursor+1], data[cursor+2]))
     cursor += 1
-
-data_block = Data_Block(start, end, data[start:end])
-print(data_block)
+blocks.append(Data_Block(start, end, data[start:end]))
 
 while cursor < len(data)-1:
     length = data[cursor]
@@ -141,8 +162,7 @@ while cursor < len(data)-1:
     start = cursor
     cursor += length
     end = cursor
-    data_block = Data_Block(start, end, data[start:end])
-    print(data_block)
+    blocks.append(Data_Block(start, end, data[start:end]))
     if cursor < len(data)-1:
         if data[cursor] == 0x00 and data[cursor] == 0x00 and data[cursor] == 0x00:
             cursor += 3
@@ -154,3 +174,9 @@ if cursor < len(data)-1:
     logging.error("Cursor not at the end (%i!=%i)" % (cursor, len(data)-1))
     print(data[cursor:])
 logging.info("Done")
+
+for block in blocks:
+    if p.output_type == "print":
+        print(block)
+    elif p.output_type == "csv":
+        print(block.generate_csv())
