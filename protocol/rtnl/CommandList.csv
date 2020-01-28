@@ -1,0 +1,5 @@
+Command;Source;Description;Example String;Example Number;Example F9
+632;BOX;Toniebox MAC;0123456789AB;;
+703;SERVER;FW_1;EU_V3.0.5_BF1-0;;880c667
+704;SERVER;FW_2;EU_V3.0.5_stable_branch;;880c667
+623;BOX;WIFI_SSID_BSSID;WLAN_SSID[0x00]0123456789AB ;;880c667
