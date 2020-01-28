@@ -2,16 +2,16 @@ syntax = "proto3";
 
 message RTNL_PROTOCOL_A {
     fixed64 f1 = 1
-    int32 command_counter = 2
-    int32 f3 = 3
-    int32 f4 = 4
-    int32 f5 = 5
-    string payload = 6
-
-    fixed32 firmware_id = 8
+    variant request_counter = 2
+    variant f3 = 3
+    variant flag_payload = 4 //1 -> payload_string, 3 -> payload_number, 4 -> both payloads
+    variant command_id = 5
+    string payload_string = 6
+    variant payload_number = 7
+    fixed32 firmware_id = 8 //unix_timestamp
     string f9 = 9
 }
 message RTNL_PROTOCOL_B {
-    fixed32 f1 = 1
-    int32 f2 = 2
+    fixed32 f1 = 1 //current unix_timestamp
+    int32 f2 = 2 //fixed?
 }
