@@ -1,2 +1,5 @@
 tools/__pycache__/
 tools/cert_config.py
+protocol/rtnl/_data/
+.~lock.*
+protocol/rtnl/CommandList.xlsx
