@@ -3,8 +3,8 @@ syntax = "proto3";
 message RTNL_PROTOCOL_A {
     fixed64 f1 = 1
     variant request_counter = 2
-    variant f3 = 3
-    variant flag_payload = 4 //1 -> payload_string, 3 -> payload_number, 4 -> both payloads
+    variant flag_payload = 3 //1 -> payload_string, 3 -> payload_number, 4 -> both payloads
+    variant f4 = 4
     variant command_id = 5
     string payload_string = 6
     variant payload_number = 7
