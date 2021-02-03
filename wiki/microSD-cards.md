@@ -16,7 +16,7 @@ Here you find a list of working microSD cards for the box. It seems to be very p
 * 32GB Samsung EVO Plus microSDHC I 1
 
 # SD card extension
-For convenience a SD extension cable can be used to place the card in a better accessible space. A 25 cm cable is recommend.
+For convenience a SD extension cable can be used to place the card in a better accessible way. A 25 cm cable is recommend.
 
 You can use both types of cables:
 
