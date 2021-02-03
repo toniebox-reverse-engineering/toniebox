@@ -23,11 +23,11 @@ You can use both types of cables:
 * microSD card – microSD card
 * microSD card – SD card
 
-![](../pics/sd_extension_cable.jpg)
+![](https://raw.githubusercontent.com/toniebox-reverse-engineering/toniebox/master/pics/sd_extension_cable.jpg)
 
 ## Cable modification
 Out-of-the box the cable is not working because of the resistor between VDD (3.3 V) and CLK. The reason for that is unclear.
 
 It is necessary to remove this resistor.
 
-![](../pics/sd_extension_cable_removed_resistor.jpg)
+![](https://raw.githubusercontent.com/toniebox-reverse-engineering/toniebox/master/pics/sd_extension_cable_removed_resistor.jpg)
