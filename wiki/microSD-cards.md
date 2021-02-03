@@ -28,5 +28,6 @@ You can use both types of cables:
 ## Cable modification
 Out-of-the box the cable is not working because of the resistor between VDD (3.3 V) and CLK. The reason for that is unclear.
 
-It is necessary to remove this resistor. 
+It is necessary to remove this resistor.
+
 ![](../pics/sd_extension_cable_removed_resistor.jpg)
