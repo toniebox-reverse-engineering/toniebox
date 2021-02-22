@@ -35,29 +35,46 @@ Datasheet: [Tag Connect TC2050-IDC-NL]https://www.tag-connect.com/wp-content/upl
 
 Available at: [Tag Connect TC2050-IDC-NL](https://www.tag-connect.com/product/tc2050-idc-nl-10-pin-no-legs-cable-with-ribbon-connector)
 
+Alternative (cheaper): [PCB Clip 1.27mm 5 Pin Double Row](https://a.aliexpress.com/_BSuEeo)
+
 # Boot Mode
 The CC3200 device implements a sense-on-power (SoP) scheme to switch between two modes that are available within the Tonie project. (To switch between the boot modes a restart of the device is needed.) [CC3200 datasheet 5.9.3](http://www.ti.com/lit/ds/symlink/cc3200.pdf)
 ## SWD Mode
-SOP2 (pin 9) low will activate the functional mode with a 2-wire SWD mapped to TCK (pin 7) and TMS (pin 8) of the debug port 
+SOP2 (pin 9) low (standard) will activate the functional mode with a 2-wire SWD mapped to TCK (pin 7) and TMS (pin 8) of the debug port.
 ## UART mode
 SOP2 (pin 9) high will activate the UART load mode to flash the system during development and in OEM assembly line
 
 # Extract Firmware
-To activate UART Mode, SOP2 (pin 9) needs to be pulled high.
 ## Introduction
-Grab your favourite USB-UART 3.3V interface, recommending those with DTR and RTS port to automate board reset + boot mode (SOP2 / pin9 = high). You may also use a CC3200 Launchpad, but then you will need to reset it by hand.
+Grab your favourite USB-UART **3.3V** interface, recommending those with DTR or RTS port to automate board reset. You may also use a CC3200 Launchpad, but then you will need to reset it by hand. SOP2 need to be pulled high while reset to set the cc3200 into UART-Mode.
+
 ## Toolset
-Use [cc3200tool](https://github.com/toniebox-reverse-engineering/cc3200tool) to extract the firmware.
-1. Extract full firmware `cc3200tool -p /dev/ttyUSB2 --sop2 ~dtr --reset rts read_flash firmware.dmp`
-2. List files in FatFS `cc3200tool -p /dev/ttyUSB2 --sop2 ~dtr --reset rts list_filesystem`
-3. Extract the files you like `cc3200tool -p /dev/ttyUSB2 --sop2 ~dtr --reset rts read_file /sys/mcuimg.bin ./sys/mcuimg.bin`
+Use [cc3200tool](https://github.com/toniebox-reverse-engineering/cc3200tool) to extract the firmware. Just download it to your favorite location.
+You will need to install python3 (including pip3). The [cc3200tool](https://github.com/toniebox-reverse-engineering/cc3200tool) needs the package pyserial (which can be automatically installed via the setup.py). You may install it manually via `pip3 install pyserial`. To make the process easier, we just call the cc.py within the `cc3200tool/` directory. 
 
-<!--
- # SWD debug mode
- By pulling SOP2 (pin 9) low, SWD debug mode on TCK (pin 7) and TMS (pin 8) can be activated.
+## Connection
+Please connect the toniebox to your power supply and/or battery. Please double check your UART that its VCC is 3.3V and not 5.0V. If your UART is missing DTR you will need to connect the Toniebox RST to GND for a moment before each command to reset the box. If you reset the box it should glow green all the time without booting and playing its startup jingle.
 
- (...SWD mode needs to be verified. NOT TESTED YET!)
--->
+| Toniebox | Toniebox | UART |
+| -------- | -------  | ---- |
+| GND      |          | GND  |
+| TX       |          | RX   |
+| RX       |          | TX   |
+| RST      |          | DTR  |
+| VCC      | SOP2     |      |
+| SOP2     | VCC      |      |
+
+## Example commands
+You may replace COM3 with the right port on your computer (linux ex. /dev/ttyUSB0). Please add `--reset dtr` to each command (see 6.) if you have RST connected to DTR for auto reset.
+
+1. List files in FatFS (useful to check the connection) `python3 cc.py -p COM3 list_filesystem`
+2. Extract full firmware `python3 cc.py -p COM3 read_flash firmware.dmp`
+3. Extract all files `python3 cc.py -p COM3 read_all_files ./target_dir`
+4. Extract singe files `python3 cc.py -p COM3 read_file /sys/mcuimg.bin ./sys/mcuimg.bin`
+5. Extract firmware and files `python3 cc.py -p COM3 read_flash firmware.dmp read_all_files ./target_dir`
+6. List files in FatFS with DTR auto reset `python3 cc.py -p COM3 --reset dtr list_filesystem`
+
+If you are done, either disconnect the box from the charger and battery or remove SOP2 from VCC and connect the Toniebox RST to GND for a moment to reset the box.
 
 # Log output
 The original bootloader and the original firmware do some logging to the serial port with baudrate 921600
