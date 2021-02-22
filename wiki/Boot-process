@@ -8,3 +8,5 @@ The original firmware bootloader has a relocator which loads the bootloader to m
 
 ## OFW bootloader
 The bootloader loads a file called "/sys/mcubootinfo.bin" that contains the id of the firmware to load.
+
+To verify the integrity of the firmware, a sha256 hash is appended to the end of each firmware file. The bootloader checks it.
