@@ -61,18 +61,22 @@ Please connect the toniebox to your power supply and/or battery. Please double c
 | TX       |          | RX   |
 | RX       |          | TX   |
 | RST      |          | DTR  |
-| VCC      | SOP2     |      |
-| SOP2     | VCC      |      |
+| VCC      | SOP2*    |      |
+| SOP2     | VCC*     |      |
+
+*Pin SOP2 of the Toniebox should be bridged with the VCC of the Toniebox.
 
 ## Example commands
 You may replace COM3 with the right port on your computer (linux ex. /dev/ttyUSB0). Please add `--reset dtr` to each command (see 6.) if you have RST connected to DTR for auto reset.
 
-1. List files in FatFS (useful to check the connection) `python3 cc.py -p COM3 list_filesystem`
-2. Extract full firmware `python3 cc.py -p COM3 read_flash firmware.dmp`
-3. Extract all files `python3 cc.py -p COM3 read_all_files ./target_dir`
-4. Extract singe files `python3 cc.py -p COM3 read_file /sys/mcuimg.bin ./sys/mcuimg.bin`
-5. Extract firmware and files `python3 cc.py -p COM3 read_flash firmware.dmp read_all_files ./target_dir`
-6. List files in FatFS with DTR auto reset `python3 cc.py -p COM3 --reset dtr list_filesystem`
+| | Descriptiion | Command |
+| - | - | - |
+| 1 | List files in FatFS (useful to check the connection) | `python cc.py -p COM3 list_filesystem` |
+| 2 | Extract full firmware | `python cc.py -p COM3 read_flash firmware.dmp` |
+| 3 | Extract all files | `python cc.py -p COM3 read_all_files ./target_dir` |
+| 4 | Extract singe files | `python cc.py -p COM3 read_file /sys/mcuimg.bin ./sys/mcuimg.bin` |
+| 5 | Extract firmware and files | `python cc.py -p COM3 read_flash firmware.dmp read_all_files ./target_dir` |
+| 6 | List files in FatFS with DTR auto reset | `python cc.py -p COM3 --reset dtr list_filesystem` |
 
 If you are done, either disconnect the box from the charger and battery or remove SOP2 from VCC and connect the Toniebox RST to GND for a moment to reset the box.
 
