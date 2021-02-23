@@ -82,7 +82,7 @@ If you are done, either disconnect the box from the charger and battery or remov
 
 # Log output
 The original bootloader and the original firmware do some logging to the serial port with baudrate 921600
-ex. "screen /dev/ttyUSB0 921600"
+ex. Linux: "screen /dev/ttyUSB0 921600" or under Windows with PuTTY.
 
 ## bootloader
 ```
