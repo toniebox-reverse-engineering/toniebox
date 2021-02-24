@@ -31,7 +31,7 @@ The debug port runs on `3.3 V`
 
 To connect to the debug port a Tag-Connector can be used.
 
-Datasheet: [Tag Connect TC2050-IDC-NL]https://www.tag-connect.com/wp-content/uploads/bsk-pdf-manager/TC2050-IDC-NL_Datasheet_8.pdf)
+Datasheet: [Tag Connect TC2050-IDC-NL](https://www.tag-connect.com/wp-content/uploads/bsk-pdf-manager/TC2050-IDC-NL_Datasheet_8.pdf)
 
 Available at: [Tag Connect TC2050-IDC-NL](https://www.tag-connect.com/product/tc2050-idc-nl-10-pin-no-legs-cable-with-ribbon-connector)
 
