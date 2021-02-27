@@ -19,6 +19,23 @@ def doJSONDump(data, inputfile):
    data = {'Filename': inputfile, 'FWInfo': findFWInfo(data), 'creationDate': findCreationDate(data), 'git shorthash': findGITHash(data), 'sha256': findHash(data), 'calculatedHash': calcHash(data)}
    return json.dumps(data, indent=4)
 
+def doCSVHeader():
+   data = "Filename" + ";" + "Version1" + ";" + "Version2" + ";" + "Creation Date" + ";" + "git short hash"  + ";" + "hash" + ";" + "calculated hash"
+   return data
+
+def doCSVDump(data, inputfile):
+   fwInfo = findFWInfo(data)
+   if len(fwInfo) > 0:
+      version1 = fwInfo[0]
+   else:
+      version1 = ""
+   if len(fwInfo) > 1:  
+      version2 = fwInfo[1]
+   else:
+      version2 = ""
+   data = os.path.basename(inputfile) + ";" + version1 + ";" + version2 + ";" + findCreationDate(data) + ";" + findGITHash(data) + ";" + findHash(data) + ";" + calcHash(data)
+   return data
+
 def printAllInfo(data):
    versions = findFWInfo(data)
    for i in versions:
@@ -90,6 +107,8 @@ def main(argv):
                       help="recursive extracting (in recursive mode option -all is used)", default=0)
    dumpgroup.add_argument("-j", "--json", action="count",
                       help="dump output in json format", default=0)
+   dumpgroup.add_argument("-C", "--csv", action="count",
+                      help="dump output in csv format", default=0)
 
    args = parser.parse_args()
 
@@ -112,6 +131,8 @@ def main(argv):
        print(findFWInfo(data))
    elif args.recursive:
          json_list = []
+         if (args.csv):
+            print(doCSVHeader())
          for root, dirnames, filenames in os.walk(inputfile):
             for filename in fnmatch.filter(filenames, '*.bin'):
                #print("--\nfilename: ", os.path.join(root, filename))
@@ -127,6 +148,8 @@ def main(argv):
                      #temp = foo['Files'] 
                      #temp.append(foo)
                      #print(json.dumps(jsonMerge, indent=4))
+                  elif (args.csv):
+                     print(doCSVDump(data, os.path.join(root, filename)))
                   else:
                      printAllInfo(data)
                if (args.json):
