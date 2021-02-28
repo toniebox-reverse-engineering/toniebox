@@ -66,6 +66,8 @@ Please connect the toniebox to your power supply and/or battery. Please double c
 
 *Pin SOP2 of the Toniebox should be bridged with the VCC of the Toniebox.
 
+If you have got problems [check out the known problems and fixes.](Known-Problems-and-Fixes.md#cc3200tool-related)
+
 ## Example commands
 You may replace COM3 with the right port on your computer (linux ex. /dev/ttyUSB0). Please add `--reset dtr` to each command (see 6.) if you have RST connected to DTR for auto reset.
 
