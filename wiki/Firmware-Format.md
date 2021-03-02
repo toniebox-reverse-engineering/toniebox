@@ -1,7 +1,5 @@
 # Analysing the Toniebox firmware image format
 
-
-
 The Toniebox uses the image structure just like in the cc3200-sdk from ti.
 So from to-sdl/1.5.0/flc/flc.h see the following header:
 
@@ -32,7 +30,7 @@ So from to-sdl/1.5.0/flc/flc.h see the following header:
 #define IMG_ACT_USER2           2
 ```
 As we can see they are using 4 images. First one is the mcubootinfo.bin. Next one is the mcuimg1.bin and the next two images
-are indented to use for OTA updates while the first one is inteded to be the factory reset/default image kind of backup.
+are indented to be used for OTA updates while the first one is inteded to be the factory reset/default image kind of backup.
 
 ## Format of Toniebox Bootinfo reversed with radare2
 
@@ -245,5 +243,157 @@ But every version string seems to have the pattern _V included, lets try to buil
 an regular expression for it and every version string is followed by the bytes
 0500 acbe so far, we could use that to find an start point for our search.
 
-So you can find an simple python tool for extracting all information from firmware files
-here: [Firmware Information Extractor](https://github.com/toniebox-reverse-engineering/toniebox/blob/master/tools/firmware_info.py)
+Another very interessting observation are the bytes 0xBEAC0005 at the end of the file just
+right before the SHA256 hash.
+
+## Format of Toneibox original bootloader reversed with radare2
+
+```{shell}
+% r2 mcuimg.bin
+ -- AHHHHH!!!! ASSEMBLY CODE!!!!!! HOLD ME I'M SCARED!!!!!!!!!!
+[0x00000000]> sG
+[0x000051de]> s -2
+[0x000051dc]> x -250
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
+0x000050e2  0000 0000 0000 0000 0000 0000 0000 0000  ................
+0x000050f2  0000 0000 0000 0000 0000 0000 0000 0000  ................
+0x00005102  0000 0000 0000 0000 0000 0000 0000 0000  ................
+0x00005112  0000 0000 0000 0000 0000 0000 0000 0000  ................
+0x00005122  0000 0000 0000 0000 0000 0000 0000 0000  ................
+0x00005132  0000 0000 0000 0000 0000 0000 0000 93c7  ................
+0x00005142  0320 b4c7 0320 fac7 0320 e1c7 0320 1dc7  . ... ... ... ..
+0x00005152  0320 a6c7 0320 a1c7 0320 8fc7 0320 c6c7  . ... ... ... ..
+0x00005162  0320 d9c7 0320 99c7 0320 0500 acbe 0000  . ... ... ......
+0x00005172  0000 456d c957 0000 0000 3039 6336 3337  ..Em.W....09c637
+0x00005182  3400 4672 6920 5365 7020 2032 2031 343a  4.Fri Sep  2 14:
+0x00005192  3135 3a30 3120 4345 5354 2032 3031 3600  15:01 CEST 2016.
+0x000051a2  0000 0000 0000 0000 0000 0000 0000 0000  ................
+0x000051b2  0000 0000 0000 0000 0000 0000 0000 0001  ................
+0x000051c2  0200 0100 0106 0000 0000 100e 0000 0000  ................
+0x000051d2  0000 2c01 1000 0500 acbe                 ..,.......
+[0x000051dc]> 
+```
+
+So as we can see we get the same EOF indicator as within the mcuimgX.bin images.
+But it seems like there is no hash stored within the bootloader itself. Won't make
+sense at all, because the is no bootstage that could verify the correct hash of the BL.
+But we get an git shorthash and an timestamp again.
+
+## Python tool for extracting all this information by your own
+
+During the reversing of all this cool there was a python tool developped for extracting all this information by your own 
+if you are afraid for hex editors. It has some nice features like recursive mode, csv and json export so you can extract this informations from any folder you like. For the toniebox users out there who have a big collection of firmware images :)
+
+Find the tool here: [Firmware Information Extractor](https://github.com/toniebox-reverse-engineering/toniebox/blob/master/tools/firmware_info.py)
+
+It is almost self explaining and has a help menue: 
+
+```{shell}
+%% ./firmware_info.py -r testfolder/foo
+
+
+Filename: testfolder/foo/mcuimg2.bin
+Firmware Version: 	EU_V3.0.6_BF1-0
+Firmware Version: 	EU_V3.0.6_stable_branch
+
+Creation Date: 		18 Feb 18:15
+
+Read SHA256: 		11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f
+Calculated SHA256: 	11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f
+GIT Shorthash: 		aa22b62
+
+
+Filename: testfolder/foo/mcuimg3.bin
+Firmware Version: 	EU_V3.0.8-0
+Firmware Version: 	3.0.8_EU
+
+Creation Date: 		14 Oct 17:32
+
+Read SHA256: 		f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56
+Calculated SHA256: 	f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56
+GIT Shorthash: 		33d4f3a
+
+
+Filename: testfolder/foo/mcuimg1.bin
+Firmware Version: 	PD_V3.0.7-0
+Firmware Version: 	PD_V3.0.7_stable_branch
+
+Creation Date: 		02 Dec 15:18
+
+Read SHA256: 		b35e6e23b859fb32ee9088ebb1a09aae3cac1c93023e66aff536dcea6d5d498b
+Calculated SHA256: 	b35e6e23b859fb32ee9088ebb1a09aae3cac1c93023e66aff536dcea6d5d498b
+GIT Shorthash: 		39a3af7
+% ./firmware_info.py -jr testfolder/foo
+[
+    {
+        "Filename": "testfolder/foo/mcuimg2.bin",
+        "FWInfo": [
+            "EU_V3.0.6_BF1-0",
+            "EU_V3.0.6_stable_branch"
+        ],
+        "creationDate": "18 Feb 18:15",
+        "git shorthash": "aa22b62",
+        "sha256": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f",
+        "calculatedHash": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f"
+    }
+]
+[
+    {
+        "Filename": "testfolder/foo/mcuimg2.bin",
+        "FWInfo": [
+            "EU_V3.0.6_BF1-0",
+            "EU_V3.0.6_stable_branch"
+        ],
+        "creationDate": "18 Feb 18:15",
+        "git shorthash": "aa22b62",
+        "sha256": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f",
+        "calculatedHash": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f"
+    },
+    {
+        "Filename": "testfolder/foo/mcuimg3.bin",
+        "FWInfo": [
+            "EU_V3.0.8-0",
+            "3.0.8_EU"
+        ],
+        "creationDate": "14 Oct 17:32",
+        "git shorthash": "33d4f3a",
+        "sha256": "f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56",
+        "calculatedHash": "f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56"
+    }
+]
+[
+    {
+        "Filename": "testfolder/foo/mcuimg2.bin",
+        "FWInfo": [
+            "EU_V3.0.6_BF1-0",
+            "EU_V3.0.6_stable_branch"
+        ],
+        "creationDate": "18 Feb 18:15",
+        "git shorthash": "aa22b62",
+        "sha256": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f",
+        "calculatedHash": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f"
+    },
+    {
+        "Filename": "testfolder/foo/mcuimg3.bin",
+        "FWInfo": [
+            "EU_V3.0.8-0",
+            "3.0.8_EU"
+        ],
+        "creationDate": "14 Oct 17:32",
+        "git shorthash": "33d4f3a",
+        "sha256": "f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56",
+        "calculatedHash": "f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56"
+    },
+    {
+        "Filename": "testfolder/foo/mcuimg1.bin",
+        "FWInfo": [
+            "PD_V3.0.7-0",
+            "PD_V3.0.7_stable_branch"
+        ],
+        "creationDate": "02 Dec 15:18",
+        "git shorthash": "39a3af7",
+        "sha256": "b35e6e23b859fb32ee9088ebb1a09aae3cac1c93023e66aff536dcea6d5d498b",
+        "calculatedHash": "b35e6e23b859fb32ee9088ebb1a09aae3cac1c93023e66aff536dcea6d5d498b"
+    }
+]
+```
