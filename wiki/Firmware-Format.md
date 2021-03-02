@@ -1,7 +1,112 @@
-# Analysing the toniebox firmware image format
+# Analysing the Toniebox firmware image format
 
 
-## Format of Tonibox OFW Image reversed with radare2 
+
+The Toniebox uses the image structure just like in the cc3200-sdk from ti.
+So from to-sdl/1.5.0/flc/flc.h see the following header:
+
+```{C}
+#ifndef FAST_BOOT
+#define IMG_BOOT_INFO           "/sys/mcubootinfo.bin"
+#define IMG_FACTORY_DEFAULT     "/sys/mcuimg1.bin"
+#define IMG_USER_1              "/sys/mcuimg2.bin"
+#define IMG_USER_2              "/sys/mcuimg3.bin"
+#else
+#define IMG_BOOT_INFO           "/sys/mcureserved.bin"
+#define IMG_USER_1              "/sys/mcuimg.bin"
+#define IMG_USER_2              "/sys/mcuflpatch.bin"
+#endif
+  
+/******************************************************************************
+   Image status
+*******************************************************************************/
+#define IMG_STATUS_TESTING      0x12344321
+#define IMG_STATUS_TESTREADY    0x56788765
+#define IMG_STATUS_NOTEST       0xABCDDCBA
+
+/******************************************************************************
+   Active Image
+*******************************************************************************/
+#define IMG_ACT_FACTORY         0
+#define IMG_ACT_USER1           1
+#define IMG_ACT_USER2           2
+```
+As we can see they are using 4 images. First one is the mcubootinfo.bin. Next one is the mcuimg1.bin and the next two images
+are indented to use for OTA updates while the first one is inteded to be the factory reset/default image kind of backup.
+
+## Format of Toniebox Bootinfo reversed with radare2
+
+Let's check the mcubootinfo.bin first, so open it with radare2.
+
+```{shell}
+% r2 mcubootinfo.bin 
+ -- Run your own r2 scripts in awk using the r2awk program.
+[0x00000000]> x
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
+0x00000000  02d8 0320 badc cdab ffff ffff ffff ffff  ... ............
+0x00000010  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x00000020  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x00000030  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x00000040  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x00000050  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x00000060  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x00000070  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x00000080  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x00000090  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x000000a0  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x000000b0  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x000000c0  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x000000d0  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x000000e0  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+0x000000f0  ffff ffff ffff ffff ffff ffff ffff ffff  ................
+[0x00000000]> 
+```
+
+As we can see it is only a 8 byte big file.
+
+```{shell}
+ % ls -lisa mcubootinfo.bin
+8632122446 8 -rw-r--r--  1 kai  staff  8 18 Feb 22:35 mcubootinfo.bin
+```
+
+First of all we need to find the correct matches for the defines IMG_STATUS_TESTING, IMG_STATUS_TESTREADY, IMG_STATUS_NOTEST.
+Remember ARM is little endian based, that means 0xABCDDCBA will become 0xBADCCDAB in our binary.
+
+```{shell}
+% r2 mcubootinfo.bin      
+ -- A C program is like a fast dance on a newly waxed dance floor by people carrying razors - Waldi Ravens
+[0x00000000]> /x badccdab
+Searching 4 bytes in [0x0-0x8]
+hits: 1
+0x00000004 hit4_0 badccdab
+[0x00000000]> 
+```
+
+And of course we get a macht for this byte. So in this case we will boot our image in NOTEST mode. The selected Image is 0x02 beacuse the first byte is read from the bootloader due to flc.c:
+
+```{shell}
+[0x00000000]> x 4
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
+0x00000000  02d8 0320   
+```
+
+So agian we need to rememeber it is little endian and it is 4 byte aligned so only 0x02 is used, the other bytes seen should be just garbage due to the 4 byte alignment. 
+
+Examples for other modes an images can look like this:
+
+TESTREADY:
+```{shell}
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
+0x00000000  02d8 0320 6587 7856       
+```
+
+TESTING mit Image 0x01:
+```{shell}
+- offset -   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF
+0x00000000  01d8 0320 2143 3412     
+```
+
+## Format of Toniebox OFW Image reversed with radare2 
 
 First of all let's start with the interesting informations at the end of the files.
 ```{shell}
