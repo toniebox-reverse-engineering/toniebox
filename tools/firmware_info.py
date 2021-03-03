@@ -50,16 +50,14 @@ def identifyFileType(data, inputfile):
 def doBoloParsing(data):
    # find the git shorthash at -96 to -89
    # find the date at -88 to -59
-   print (data[-96:-89].decode('utf-8'))
-   print (data[-88:-59].decode('utf-8'))
+   return [(data[-96:-89].decode('utf-8')),(data[-88:-59].decode('utf-8'))]
    
-
 
 def doBootInfoParsing(data):
-   result_list = []
+   result_dict = {'Slot':[],'Mode':[]}
    
    # get selected image
-   result_list.append({'Selected Slot': data[0:1]})
+   result_dict['Slot'].append(data[0:1])
 
    # ARM is little endian
    IMG_STATUS_TESTING = bytes([0x21, 0x43, 0x34, 0x12])     # from flc.c 0x12344321
@@ -67,8 +65,8 @@ def doBootInfoParsing(data):
    IMG_STATUS_NOTEST = bytes([0xBA, 0xDC, 0xCD, 0xAB])      # from flc.c 0xABCDDCBA
 
    match_list = [IMG_STATUS_NOTEST, IMG_STATUS_TESTING, IMG_STATUS_TESTREADY]
-   result_list.append({'Boot mode': match_list.index(data[4:8])})
-   return result_list
+   result_dict['Mode'].append(match_list.index(data[4:8]))
+   return result_dict
    
 
 def doJSONDump(data, inputfile):
@@ -210,11 +208,16 @@ def main(argv):
                         # Read the whole file at once
                         data = binary_file.read()
                         type = identifyFileType(data, os.path.join(root, filename))
-                        print(type)
                         if (args.json):
                            if (type == TYPE_BOOTINFO):
                               print ('Found bootinfo file skipped for JSON-Output: ')
-                              print (doBootInfoParsing(data))
+                              bootinfo = doBootInfoParsing(data)
+                              print('\n'.join("{}: {}".format(k, v) for k, v in bootinfo.items()))
+                              #print ('Selected image slot: ', bootinfo['slot'])
+                              #print ('Boot mode: ', bootinfo['mode'])
+                           elif (type == TYPE_BL):
+                              print ('Found bootloader file skipped for JSON-Output: ')
+                              print (*doBoloParsing(data), sep = "\n")
                            else:
                               json_list.append(json.loads(doJSONDump(
                                  data, os.path.join(root, filename))))
@@ -222,7 +225,12 @@ def main(argv):
                               print(doCSVDump(data, os.path.join(root, filename)))
                         else:
                               print('\n\nFilename: '+ os.path.join(root, filename))
-                              printAllInfo(data)
+                              if (type == TYPE_BOOTINFO):
+                                 print('\n'.join("{}: {}".format(k, v) for k, v in doBootInfoParsing(data).items()))
+                              elif (type == TYPE_BL):
+                                 print (*doBoloParsing(data), sep = "\n")
+                              else:
+                                 printAllInfo(data)
                      except:
                         print("File not supported: " + os.path.join(root, filename))
          if (args.json):
