@@ -1,7 +1,7 @@
 # List of known firmware versions
 
 |Version|Branch|Creation Date|Year|git short hash|Comments|hash|
-|-|-|-|-|-|-|-|-|-|-|-|
+|-|-|-|-|-|-|-|
 |EU_V3.0.8-0|3.0.8_EU|14 Oct 17:32|2020|33d4f3a||f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56|
 |EU_V3.0.7-0|EU_V3.0.7_stable_branch|17 Jul 09:49|2020|ba7a7b5||14ae54febb0f08cc055e64a0ca29243fa5ce51b5d7f9ce2aab3a5671d276be3b|
 |PD_V3.0.6_BF6-0|3.0.6_PD_BF6|19 Jun 18:08|2020|6fee560||be2918f9ab17f813c7c6aef553c929ae89d48f4621f5db1843851af4aa8a8ddb|
