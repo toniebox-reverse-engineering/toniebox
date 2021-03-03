@@ -6,7 +6,7 @@
 # from -152 to -140 the creation date
 # from -64 to EOF the SHA256 hash of the file
 #
- 
+
 import hashlib
 import re
 import sys
@@ -15,23 +15,65 @@ import os
 import fnmatch
 import json
 
-MCUIMG_EOF = 0x0500ACBE # 0xBEAC0005 seems to identify the file end in the mcuimgX.bin files
+# some global variables
+# Images types
+TYPE_BOOTINFO = 0
+TYPE_BL = 1
+TYPE_FW = 2
+#IMG_TYPE = 0
+# boot modes
+MODE_NOTEST = 0
+MODE_TESTREADY = 1
+MODE_TESTING = 2
+BOOT_MODE = 0
 
-def identifyFile():
-   # check if we opend a mcubootinfo.bin and mcuimgX.bin or and BL
+BOOT_MODES = ["NOTEST", "TESTREADY", "TEST" ]
+
+# 0xBEAC0005 seems to identify the file end in the mcuimgX.bin files
+search_pattern = bytes([0x05, 0x00, 0xac, 0xbe])
+#search_pattern_bl = bytes([0x05, 0x00, 0xac, 0xbe])
+
+def identifyFileType(data, inputfile):
+   # first lets check if the image is of type mcubootinfo.bin
+   file_size = os.stat(inputfile).st_size
+   if file_size == 8:
+      return TYPE_BOOTINFO
+   elif data[-4:] == search_pattern:
+      return TYPE_BL
+   elif data[-68:-64] == search_pattern:
+      return TYPE_FW
+   else:
+      raise Exception("FILE TYPE NOT SUPPORTED")
+   return -1
+
+
+def doBoloParsing(data):
+   # find the git shorthash at -96 to -89
+   # find the date at -88 to -59
+   print (data[-96:-89].decode('utf-8'))
+   print (data[-88:-59].decode('utf-8'))
    
-   return
 
-def doBootInfoParsing():
-                                      # ARM is little endian
-   IMG_STATUS_TESTING = 0x21433412     # from flc.c 0x12344321
-   IMG_STATUS_TESTREADY = 0x65877856   # from flc.c 0x56788765
-   IMG_STATUS_NOTEST = 0xBADCCDAB      # from flc.c 0xABCDDCBA
-   return
+
+def doBootInfoParsing(data):
+   result_list = []
+   
+   # get selected image
+   result_list.append({'Selected Slot': data[0:1]})
+
+   # ARM is little endian
+   IMG_STATUS_TESTING = bytes([0x21, 0x43, 0x34, 0x12])     # from flc.c 0x12344321
+   IMG_STATUS_TESTREADY = bytes([0x65, 0x87, 0x78, 0x56])   # from flc.c 0x56788765
+   IMG_STATUS_NOTEST = bytes([0xBA, 0xDC, 0xCD, 0xAB])      # from flc.c 0xABCDDCBA
+
+   match_list = [IMG_STATUS_NOTEST, IMG_STATUS_TESTING, IMG_STATUS_TESTREADY]
+   result_list.append({'Boot mode': match_list.index(data[4:8])})
+   return result_list
+   
 
 def doJSONDump(data, inputfile):
    data = {'Filename': inputfile, 'FWInfo': findFWInfo(data), 'creationDate': findCreationDate(
-        data), 'git shorthash': findGITHash(data), 'sha256': findHash(data), 'calculatedHash': calcHash(data)}
+      data), 'git shorthash': findGITHash(data), 'sha256': findHash(data), 'calculatedHash': calcHash(data)}
    return json.dumps(data, indent=4)
 
 
@@ -52,7 +94,7 @@ def doCSVDump(data, inputfile):
         version2 = fwInfo[1]
     else:
         version2 = ""
-    data = os.path.basename(inputfile) + ";" + version1 + ";" + version2 + ";" + findCreationDate(
+    data = inputfile + ";" + version1 + ";" + version2 + ";" + findCreationDate(
         data) + ";" + findGITHash(data) + ";" + findHash(data) + ";" + calcHash(data)
     return data
 
@@ -101,47 +143,53 @@ def calcHash(data):
 
 
 def findGITHash(data):
-    # jump to offset -160 relativ to end of file, here we are asuming and git
-    # shorthash can be found it is 7 digits per default so it ends
-    # at -153 relativ to the end
-    return data[-160:-153].decode('utf-8')
-
+   # jump to offset -160 relativ to end of file, here we are asuming and git
+   # shorthash can be found it is 7 digits per default so it ends
+   # at -153 relativ to the end
+   return data[-160:-153].decode('utf-8')
+   
 
 def main(argv):
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("FILE", help="input file")
-    group = parser.add_mutually_exclusive_group()
-    dumpgroup = parser.add_mutually_exclusive_group()
-    group.add_argument("-H", "--sha256", action="count",
-                       help="find sha256 hash stored in file", default=0)
-    group.add_argument("-c", "--calcHash", action="count",
-                       help="calculate sha256 hash of file content", default=0)
-    group.add_argument("-a", "--all", action="count",
-                       help="output everything (default)", default=0)
-    group.add_argument("-g", "--git", action="count",
-                       help="output git hash from file", default=0)
-    group.add_argument("-d", "--date", action="count",
-                       help="output creation date", default=0)
-    group.add_argument("-V", "--version", action="count",
-                       help="output version strings from file", default=0)
-    group.add_argument("-r", "--recursive", action="count",
-                       help="recursive extracting (in recursive mode option -all is used)", default=0)
-    dumpgroup.add_argument("-j", "--json", action="count",
-                           help="dump output in json format", default=0)
-    dumpgroup.add_argument("-C", "--csv", action="count",
-                           help="dump output in csv format", default=0)
+   parser = argparse.ArgumentParser()
+   parser.add_argument("FILE", help="input file")
+   group = parser.add_mutually_exclusive_group()
+   dumpgroup = parser.add_mutually_exclusive_group()
+   group.add_argument("-H", "--sha256", action="count",
+                     help="find sha256 hash stored in file", default=0)
+   group.add_argument("-c", "--calcHash", action="count",
+                     help="calculate sha256 hash of file content", default=0)
+   group.add_argument("-a", "--all", action="count",
+                     help="output everything (default)", default=0)
+   group.add_argument("-g", "--git", action="count",
+                     help="output git hash from file", default=0)
+   group.add_argument("-d", "--date", action="count",
+                     help="output creation date", default=0)
+   group.add_argument("-V", "--version", action="count",
+                     help="output version strings from file", default=0)
+   group.add_argument("-r", "--recursive", action="count",
+                     help="recursive extracting (in recursive mode option -all is used)", default=0)
+   dumpgroup.add_argument("-j", "--json", action="count",
+                        help="dump output in json format", default=0)
+   dumpgroup.add_argument("-C", "--csv", action="count",
+                        help="dump output in csv format", default=0)
 
-    args = parser.parse_args()
+   args = parser.parse_args()
 
-    inputfile = args.FILE
-    if not(args.recursive):
-        with open(inputfile, "rb") as binary_file:
-            # Read the whole file at once
-            data = binary_file.read()
-            # Return the hexadecimal representation of the binary data, byte instance
-    try:
-      if args.sha256:
+   inputfile = args.FILE
+   if not(args.recursive):
+      with open(inputfile, "rb") as binary_file:
+         # Read the whole file at once
+         data = binary_file.read()
+         # Return the hexadecimal representation of the binary data, byte instance
+         type = identifyFileType(data, inputfile)
+
+   try:
+      if not(args.recursive) and type == TYPE_BOOTINFO:
+         print (doBootInfoParsing(data))
+      elif not(args.recursive) and type == TYPE_BL:
+         print (doBoloParsing(data))
+      elif args.sha256:
          print(findHash(data))
       elif args.calcHash:
          print(calcHash(data))
@@ -157,38 +205,34 @@ def main(argv):
                print(doCSVHeader())
          for root, dirnames, filenames in os.walk(inputfile):
                for filename in fnmatch.filter(filenames, '*.bin'):
-                  #print("--\nfilename: ", os.path.join(root, filename))
-                  #matches.append(os.path.join(root, filename))
-                  #doJSONDump(data, os.path.join(root, filename))
-                  try:
-                     with open(os.path.join(root, filename), "rb") as binary_file:
+                  with open(os.path.join(root, filename), "rb") as binary_file:
+                     try: 
                         # Read the whole file at once
                         data = binary_file.read()
+                        type = identifyFileType(data, os.path.join(root, filename))
+                        print(type)
                         if (args.json):
+                           if (type == TYPE_BOOTINFO):
+                              print ('Found bootinfo file skipped for JSON-Output: ')
+                              print (doBootInfoParsing(data))
+                           else:
                               json_list.append(json.loads(doJSONDump(
                                  data, os.path.join(root, filename))))
-
-                              #jsonMerge = {**json.loads(jsonMerge), **json.loads(doJSONDump(data, os.path.join(root, filename)))}
-                              #temp = foo['Files']
-                              # temp.append(foo)
-                              #print(json.dumps(jsonMerge, indent=4))
                         elif (args.csv):
                               print(doCSVDump(data, os.path.join(root, filename)))
                         else:
                               print('\n\nFilename: '+ os.path.join(root, filename))
                               printAllInfo(data)
-                     if (args.json):
-                        print(json.dumps(json_list, indent=4))
-                  except:
-                     print("Something wrong with file: "+ os.path.join(root, filename))
-         # print(matches)
+                     except:
+                        print("File not supported: " + os.path.join(root, filename))
+         if (args.json):
+            print(json.dumps(json_list, indent=4))
       elif args.json:
          print(doJSONDump(data, inputfile))
       else:
          printAllInfo(data)
-    except:
-         print("File not supported!")
-
+   except:
+         print("File not supported: "+ inputfile)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
