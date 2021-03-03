@@ -323,23 +323,13 @@ Creation Date: 		02 Dec 15:18
 Read SHA256: 		b35e6e23b859fb32ee9088ebb1a09aae3cac1c93023e66aff536dcea6d5d498b
 Calculated SHA256: 	b35e6e23b859fb32ee9088ebb1a09aae3cac1c93023e66aff536dcea6d5d498b
 GIT Shorthash: 		39a3af7
-% ./firmware_info.py -jr testfolder/foo
+% ./firmware_info.py -jr testfolder/   
+Found bootinfo file skipped for JSON-Output: 
+Slot: [b'\x02']
+Mode: [0]
 [
     {
-        "Filename": "testfolder/foo/mcuimg2.bin",
-        "FWInfo": [
-            "EU_V3.0.6_BF1-0",
-            "EU_V3.0.6_stable_branch"
-        ],
-        "creationDate": "18 Feb 18:15",
-        "git shorthash": "aa22b62",
-        "sha256": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f",
-        "calculatedHash": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f"
-    }
-]
-[
-    {
-        "Filename": "testfolder/foo/mcuimg2.bin",
+        "Filename": "testfolder/mcuimg2.bin",
         "FWInfo": [
             "EU_V3.0.6_BF1-0",
             "EU_V3.0.6_stable_branch"
@@ -350,31 +340,7 @@ GIT Shorthash: 		39a3af7
         "calculatedHash": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f"
     },
     {
-        "Filename": "testfolder/foo/mcuimg3.bin",
-        "FWInfo": [
-            "EU_V3.0.8-0",
-            "3.0.8_EU"
-        ],
-        "creationDate": "14 Oct 17:32",
-        "git shorthash": "33d4f3a",
-        "sha256": "f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56",
-        "calculatedHash": "f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56"
-    }
-]
-[
-    {
-        "Filename": "testfolder/foo/mcuimg2.bin",
-        "FWInfo": [
-            "EU_V3.0.6_BF1-0",
-            "EU_V3.0.6_stable_branch"
-        ],
-        "creationDate": "18 Feb 18:15",
-        "git shorthash": "aa22b62",
-        "sha256": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f",
-        "calculatedHash": "11fa3b8273b7e0d987115fa6bc6001a1af1cc9435b3038811246b2006ceee98f"
-    },
-    {
-        "Filename": "testfolder/foo/mcuimg3.bin",
+        "Filename": "testfolder/mcuimg3.bin",
         "FWInfo": [
             "EU_V3.0.8-0",
             "3.0.8_EU"
@@ -385,7 +351,7 @@ GIT Shorthash: 		39a3af7
         "calculatedHash": "f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56"
     },
     {
-        "Filename": "testfolder/foo/mcuimg1.bin",
+        "Filename": "testfolder/mcuimg1.bin",
         "FWInfo": [
             "PD_V3.0.7-0",
             "PD_V3.0.7_stable_branch"
