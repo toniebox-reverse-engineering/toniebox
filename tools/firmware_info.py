@@ -76,25 +76,29 @@ def doJSONDump(data, inputfile):
 
 
 def doCSVHeader():
-    data = "Filename" + ";" + "Version1" + ";" + "Version2" + ";" + \
+    data = "Filename" + ";" +"Filetype" + ";" + "Version1" + ";" + "Version2" + ";" + \
         "Creation Date" + ";" + "git short hash" + \
-        ";" + "hash" + ";" + "calculated hash"
+        ";" + "hash" + ";" + "calculated hash" + ";" + "boot mode" + ";" + "selected slot"
     return data
 
 
 def doCSVDump(data, inputfile):
-    fwInfo = findFWInfo(data)
-    if len(fwInfo) > 0:
-        version1 = fwInfo[0]
-    else:
-        version1 = ""
-    if len(fwInfo) > 1:
-        version2 = fwInfo[1]
-    else:
-        version2 = ""
-    data = inputfile + ";" + version1 + ";" + version2 + ";" + findCreationDate(
-        data) + ";" + findGITHash(data) + ";" + findHash(data) + ";" + calcHash(data)
-    return data
+   #if (filetype == TYPE_FW):
+   fwInfo = findFWInfo(data)
+   if len(fwInfo) > 0:
+      version1 = fwInfo[0]
+   else:
+      version1 = ""
+   if len(fwInfo) > 1:
+      version2 = fwInfo[1]
+   else:
+      version2 = ""
+   data = inputfile  +";" + version1 + ";" + version2 + ";" + findCreationDate(
+      data) + ";" + findGITHash(data) + ";" + findHash(data) + ";" + calcHash(data)
+   #elif (type == TYPE_BOOTINFO):
+   #   bootinfo = doBootInfoParsing(data)
+    #  data = inputfile + ";" + type + ";" + "" + ";" + "" + ";" + "" + ";" + "" + ";" + "" + ";" + "" + ";" + bootinfo['Mode'] + ";" + bootinfo['Slot']
+   return data
 
 
 def printAllInfo(data):
@@ -213,8 +217,6 @@ def main(argv):
                               print ('Found bootinfo file skipped for JSON-Output: ')
                               bootinfo = doBootInfoParsing(data)
                               print('\n'.join("{}: {}".format(k, v) for k, v in bootinfo.items()))
-                              #print ('Selected image slot: ', bootinfo['slot'])
-                              #print ('Boot mode: ', bootinfo['mode'])
                            elif (type == TYPE_BL):
                               print ('Found bootloader file skipped for JSON-Output: ')
                               print (*doBoloParsing(data), sep = "\n")
@@ -222,6 +224,7 @@ def main(argv):
                               json_list.append(json.loads(doJSONDump(
                                  data, os.path.join(root, filename))))
                         elif (args.csv):
+                           if (type == TYPE_FW):
                               print(doCSVDump(data, os.path.join(root, filename)))
                         else:
                               print('\n\nFilename: '+ os.path.join(root, filename))
