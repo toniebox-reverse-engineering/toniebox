@@ -57,16 +57,20 @@ def doBootInfoParsing(data):
    result_dict = {'Slot':[],'Mode':[]}
    
    # get selected image
-   result_dict['Slot'].append(data[0:1])
+   result_dict['Slot'].append(ord(data[0:1]))
 
    # ARM is little endian
    IMG_STATUS_TESTING = bytes([0x21, 0x43, 0x34, 0x12])     # from flc.c 0x12344321
    IMG_STATUS_TESTREADY = bytes([0x65, 0x87, 0x78, 0x56])   # from flc.c 0x56788765
    IMG_STATUS_NOTEST = bytes([0xBA, 0xDC, 0xCD, 0xAB])      # from flc.c 0xABCDDCBA
 
+   mode_dict = {0 : 'NOTEST', 1 : 'TESTING', 2 : 'TESTREADY'}
+
    match_list = [IMG_STATUS_NOTEST, IMG_STATUS_TESTING, IMG_STATUS_TESTREADY]
-   result_dict['Mode'].append(match_list.index(data[4:8]))
-   return result_dict
+   result_dict['Mode'].append(mode_dict[match_list.index(data[4:8])])
+
+   result_str = ('\n'.join("{}: {}".format(k, v) for k, v in result_dict.items())).replace("[","").replace("]","").replace("'","")
+   return result_str
    
 
 def doJSONDump(data, inputfile):
@@ -215,8 +219,7 @@ def main(argv):
                         if (args.json):
                            if (type == TYPE_BOOTINFO):
                               print ('Found bootinfo file skipped for JSON-Output: ')
-                              bootinfo = doBootInfoParsing(data)
-                              print('\n'.join("{}: {}".format(k, v) for k, v in bootinfo.items()))
+                              print( doBootInfoParsing(data) )
                            elif (type == TYPE_BL):
                               print ('Found bootloader file skipped for JSON-Output: ')
                               print (*doBoloParsing(data), sep = "\n")
@@ -229,7 +232,8 @@ def main(argv):
                         else:
                               print('\n\nFilename: '+ os.path.join(root, filename))
                               if (type == TYPE_BOOTINFO):
-                                 print('\n'.join("{}: {}".format(k, v) for k, v in doBootInfoParsing(data).items()))
+                                 print( doBootInfoParsing(data) )
+                                 #print( ('\n'.join("{}: {}".format(k, v) for k, v in doBootInfoParsing(data).items())).replace("[","").replace("]","").replace("'","") )
                               elif (type == TYPE_BL):
                                  print (*doBoloParsing(data), sep = "\n")
                               else:
