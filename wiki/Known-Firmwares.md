@@ -1,5 +1,6 @@
 # List of known firmware versions
 
+## Normal firmwares
 |Version|Branch|Creation Date|Year|git short hash|Comments|hash|
 |-|-|-|-|-|-|-|
 |EU_V3.0.8-0|3.0.8_EU|14 Oct 17:32|2020|33d4f3a||f2ee433e0630a5624324277d763ce3c7aea1630a9a07a4b9817f09550f25fe56|
@@ -16,6 +17,15 @@
 |||18 Jul 14:55||6c8c96b||a9672b6c747f90286466d680ef2c8a0aeebff244b9169ccf96ff48ce127f3238|
 |||26 Jul 16:01||0930acd||71b0a665e9c97fedf351d3059ebbda21c8266d70915d49c945c1966dbf150ecc|
 |||04 May 16:24||1096f77||a0ffb8e424775cf132e7fd2236f516a7614c18f89560832eb1bb78a5f82040af|
+
+## Special firmwares
+|Version|Branch|Creation Date|Year|git short hash|Comments|hash|
+|-|-|-|-|-|-|-|
 ||||||Factory Image?|16abb09640ff6010af5b825c4a262b616b98f6006b23377ad3e510dabee5d4cf|
+
+## Demo firmwares
+|Version|Branch|Creation Date|Year|git short hash|Comments|hash|
+|-|-|-|-|-|-|-|
+|EUD_V3.0.7-0|EUD_stable_branch|04 Dec 14:19|2020|75b4627||67fbe98d9d8dfb99e037590909ee4d5009b6677b26a79148aed5cbecee54bbce|
 |||Oct 26 16:21||0e3009e|UK Demobox Firmware|eeca1bfff7baf9ebe73bddb6911333e25c708373e6499eec181749ffc9786391|
 |||Oct 24 16:00||2485fa1|UK Demobox Firmware|7510936b12cde75e9a389952437c6d8a2c07959620c8d00791eba9d72b6ea068|
