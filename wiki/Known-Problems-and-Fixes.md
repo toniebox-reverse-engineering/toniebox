@@ -43,3 +43,11 @@ The box was plugged into power supply with more than 9V.
 * Power the toniebox via its battery and/or charger and disconnect the 3.3V connection.
 * Use shorter wires (Jumpers and/or USB)
 * Use a different USB port (possibly without an USB-hub)
+
+## read_all_files only dumps a few files / list_filesystem has no filenames
+If list_filesystem doesn't show the filenames for several or all files on the flash, the tool cannot dump the files automatically with the command read_all_files.
+### Solutions
+* Dump every [important file](https://github.com/toniebox-reverse-engineering/toniebox/wiki/Firmware-Format#Important-Toniebox-firmware-files) one by one using the read_file command. You may need to create a **cert/** and **sys/** subdirectory in your target dir.
+```
+python cc.py -p COM3 read_file /cert/ca.der cert/ca.der read_file /cert/private.der cert/private.der read_file /cert/client.der cert/client.der read_file /sys/mcuimg.bin sys/mcuimg.bin read_file /sys/mcuimg1.bin sys/mcuimg1.bin read_file /sys/mcuimg2.bin sys/mcuimg2.bin read_file /sys/mcuimg3.bin sys/mcuimg3.bin read_file /sys/mcubootinfo.bin sys/mcubootinfo.bin
+```
