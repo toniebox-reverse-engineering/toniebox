@@ -1,3 +1,15 @@
+# Important Toniebox firmware files
+|File|Description|
+|-|-|
+|/cert/ca.der|Contains the Certificate Authority to check the https connection for the api|
+|/cert/private.der|Private key of the box, don't share, it is used to identificate agains the cloud|
+|/cert/client.der|Public key of the box, don't share|
+|/sys/mcuimg.bin|Original bootloader|
+|/sys/mcuimg1.bin|First original firmware slot|
+|/sys/mcuimg2.bin|Second original firmware slot|
+|/sys/mcuimg3.bin|Third original firmware slot|
+|/sys/mcubootinfo.bin|Decides which firmware slot to boot|
+
 # Analysing the Toniebox firmware image format
 
 The Toniebox uses the image structure just like in the cc3200-sdk from ti.
