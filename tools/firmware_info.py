@@ -57,7 +57,9 @@ def doBootInfoParsing(data):
    result_dict = {'Slot':[],'Mode':[]}
    
    # get selected image
-   result_dict['Slot'].append(ord(data[0:1]))
+   slot = ord(data[0:1])
+   slotText = "mcuimg"+str(slot+1)+".bin"+" (0x0"+str(slot)+")"
+   result_dict['Slot'].append(slotText)
 
    # ARM is little endian
    IMG_STATUS_TESTING = bytes([0x21, 0x43, 0x34, 0x12])     # from flc.c 0x12344321
