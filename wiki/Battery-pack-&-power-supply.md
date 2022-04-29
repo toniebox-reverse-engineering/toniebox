@@ -44,6 +44,22 @@ p_battery = adc.channel(pin='GP5')
 p_battery.value()
 ```
 
+### Voltage calculation 
+From the data above following calculation can be used:
+```
+voltage = adc * 100/67690; //charger disconnected
+voltage = adc * 100/71907; //charger connected
+```
+The OFW uses a slightly different formula:
+```
+voltage = ((adc * (40000/26173)) - 89) / 1000
+adc = ((1000 * voltage) + 89) * (26173/40000)
+```
+The OFW uses the value 3,601v or adc=2297 as low battery voltage (0xE11). As shutoff voltage 3,299v / 3,300v or adc=2099/2100 are used (0xCE3/0xCE4).
+
+
+
+
 ## Photos (Custom Battery Pack) 
 ![](https://raw.githubusercontent.com/toniebox-reverse-engineering/toniebox/master/pics/battery_custom_compare.jpg)
 ![](https://raw.githubusercontent.com/toniebox-reverse-engineering/toniebox/master/pics/battery_custom1.jpg)
