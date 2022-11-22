@@ -60,7 +60,6 @@ Because the male end of the extension cable is not flexible, inserting it in the
 
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic13.jpg)
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic14.jpg)
-![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic15.jpg)
 
 ## Step 5: Start putting the box back
 
@@ -68,17 +67,17 @@ Because the male end of the extension cable is not flexible, inserting it in the
 - Screw together the battery holder, the board and the white holder. 
 - Make sure the cable sits comfortably under the battery holder
 
-![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic16.jpg)
+![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic15.jpg)
 
 - Power on the box and test that the box recognizes the microSD card
 Make sure to never touch the battery release latch, as this will partially detach the microSD slot.
 
-![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic17.jpg)
+![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic16.jpg)
 
 Step 6: Finish putting the box back and test again
 
 - Just make sure that the microSD card is reachable with a set of tweezers and you can comfortably remove and put back the card. Be careful not to drop the card inside the box.
 
+![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic17.jpg)
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic18.jpg)
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic19.jpg)
-![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic20.jpg)
