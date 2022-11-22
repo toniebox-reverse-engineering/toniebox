@@ -39,9 +39,6 @@ In order to avoid damaging the PCB, disconnect the battery.
 This part might be a bit tricky on older boards since these ones have a capacitor that sits a few mm in front of the microSD slot. 
 
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic05.jpg)
-![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic06.jpg)
-![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic07.jpg)
-![](https://github.com/danieldur/toniebox/blob/master/pics/microSD%20extension%20cable/pic08.jpg)
 
 Because the male end of the extension cable is not flexible, inserting it in the microSD slot is a matter of force. Before inserting the extension cable it is advisable to check the position of the latch in open and closed state, in order to get a feeling about how much it has to be pushed.
 
