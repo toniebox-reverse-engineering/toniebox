@@ -71,3 +71,6 @@ But the in experiments used encoder did not have an obvious feature to do this.
 
 **We have developed a tool called [teddy](https://github.com/toniebox-reverse-engineering/teddy) to encode and decode these files.**
 
+# Audio file extraction with Linux OS
+- Remove Header of the file with ´dd bs=4092 skip=1 if=500304E0 of=trim.ogg´
+- then just use ffmpeg to convert it into mp3 ´ffmpeg -i trim.ogg done.mp3´
