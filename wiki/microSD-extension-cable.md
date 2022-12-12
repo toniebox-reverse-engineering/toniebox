@@ -9,17 +9,17 @@ You can use both types of cables:
 ![](https://raw.githubusercontent.com/toniebox-reverse-engineering/toniebox/master/pics/sd_extension_cable.jpg)
 
 ## Tools needed:
-- Philips screwdriver (PH0)
+- Philips (PH0) and flat screwdrivers
 - flat screwdriver
-- soldering station
+- soldering station or cutter
 - double sided foam tape (made for outside use since they are the strongest)
 - cutting pliers
-- extension cable - minimum 25 cm long (i.e. https://www.amazon.de/B0731FWRZC/) 
+- extension cable - minimum 25 cm long 
 
 ## Step 1: Preparing the extension cable
 
 - Remove the plastic casing of the female end of the cable (where the card has to be inserted)
-- Remove one resistor on the slot's PCB 
+- Remove one resistor on the slot's PCB (marked in red) using either a soldering station or a cutter (more risky)
 
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD-extension-cable/pic01.jpg)
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD-extension-cable/pic02.jpg)
@@ -44,7 +44,7 @@ Because the male end of the extension cable is not flexible, inserting it in the
 
 - Open the slot by pushing it towards the capacitor
 - Take the original card out and replace it with the extension cable
-- Close the microSD slot and simultaneously press with one finger on the latch while locking it into place with a flat screwdriver.
+- Close the microSD slot and simultaneously press with one finger on the latch while locking it into place with a flat screwdriver or a fingernail.
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD-extension-cable/pic09.jpg)
 
 ## Step 4: Glue the new microSD slot in an accessible place
@@ -56,7 +56,9 @@ Because the male end of the extension cable is not flexible, inserting it in the
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD-extension-cable/pic11.jpg)
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD-extension-cable/pic12.jpg)
 
-- In order to make the slot reach the very edge of the battery holder, some have cut some small slits into the walls of the two screw guides. I wanted to keep the box 100% original so I skipped this step.
+## Alternative Step 4: Make the card slot more accesible
+
+- In order to make the slot reach the very edge of the battery holder, some have cut two small slits into the walls of the screw guides. I wanted to keep my box 100% original so I skipped this step.
 
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD-extension-cable/pic13.jpg)
 ![](https://github.com/danieldur/toniebox/blob/master/pics/microSD-extension-cable/pic14.jpg)
