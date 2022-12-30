@@ -54,7 +54,7 @@
 | 52 | RTC_XTAL_N (GPIO32) | | | |
 | 53 | GPIO30 | I2S ClockO (BCLK) | DAC | |
 | 54 | VIN_IO2 | | | |
-| 55 | GPIO01 | | | TX0 |
+| 55 | GPIO01 | DAC Headphone detection | DAC+UART | TX0 |
 | 56 | VDD_DIG2  | | | |
 | 57 | GPIO02 | BTN01 | Ears | RX0 / big ear|
 | 58 | GPIO03 | Power | SD | Low = Power on |
