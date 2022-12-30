@@ -54,8 +54,24 @@ You can use mitmproxy, mitmweb or mitmdump. I prefered mitmweb
 ./mitmweb --verbose --web-host 0.0.0. --mode transparent --set client_certs=/root/client.pem --ssl-insecure -s /root/toniebox.cert-validity.py
 ```
 
-# Certificates helpers (just for legacy reasons!)
+## Using wireshark over ssh
+You'll need to install tcpdump on you target system. I also disabled password auth for sudoing tcpdump.
+```
+$ nano /etc/sudoers.d/tcpdump
 
+%pcap ALL=NOPASSWD: /usr/bin/tcpdump
+```
+Attach pcap-group to tcpdump
+```
+sudo chgrp pcap /usr/bin/tcpdump
+sudo chmod 750 /usr/bin/tcpdump
+```
+I suggest you to ssh once into your machine to confirm the signature. Then you can run wireshark over the command and then enter the password to start tcpdump
+```
+ssh user@hackiebox sudo tcpdump -i ens19 -U -s0 -w - 'not port 22' | wireshark -k -i -
+```
+
+# Certificates helpers (just for legacy reasons!)
 ## Certificate conversion
 To use the certificates and the rsa key with most tools you will need to convert it from DER to PEM
 ```
