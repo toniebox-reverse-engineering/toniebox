@@ -23,9 +23,9 @@
 | 20 | VDD3P3_RTC | | | |
 | 21 | XTAL_32K_P | | | |
 | 22 | XTAL_32K_N | | | |
-| 23 | GPIO17 | LED | LED | |
-| 24 | GPIO18 | LED | LED | |
-| 25 | GPIO19 | LED | LED | |
+| 23 | GPIO17 | Blue-LED | LED | |
+| 24 | GPIO18 | Green-LED | LED | |
+| 25 | GPIO19 | Red-LED | LED | |
 | 26 | GPIO20 | | | |
 | 27 | GPIO21 | | | |
 | 28 | SPICS1 | | | |
