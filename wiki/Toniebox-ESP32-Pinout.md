@@ -4,7 +4,7 @@
 | 02 | VDD3P3 | | | |
 | 03 | VDD3P3 | | | |
 | 04 | CHIP_PU | | | |
-| 05 | GPIO0 | | | J100 |
+| 05 | GPIO0 | Boot | | J100 |
 | 06 | GPIO1 | SS | TRF7962A | |
 | 07 | GPIO2 | MOSI | TRF7962A | |
 | 08 | GPIO3 | MISO | TRF7962A | |
