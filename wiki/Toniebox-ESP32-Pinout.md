@@ -11,7 +11,7 @@
 | 09 | GPIO4 | SCLK | TRF7962A |
 | 10 | GPIO5 | I2C_SDA | LIS + DAC |
 | 11 | GPIO6 | I2C_SCL | LIS + DAC | |
-| 12 | GPIO7 | | | |
+| 12 | GPIO7 | button pressed or charger present |  | |
 | 13 | GPIO8 | | | |
 | 14 | GPIO9 | | | |
 | -- | -- | -- | -- | -- |
