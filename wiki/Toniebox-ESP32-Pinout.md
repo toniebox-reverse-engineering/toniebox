@@ -9,8 +9,8 @@
 | 07 | GPIO2 | MOSI | TRF7962A | |
 | 08 | GPIO3 | MISO | TRF7962A | |
 | 09 | GPIO4 | SCLK | TRF7962A |
-| 10 | GPIO5 | I2C_SDA | MMA + DAC |
-| 11 | GPIO6 | I2C_SCL | MMA + DAC | |
+| 10 | GPIO5 | I2C_SDA | LIS + DAC |
+| 11 | GPIO6 | I2C_SCL | LIS + DAC | |
 | 12 | GPIO7 | | | |
 | 13 | GPIO8 | | | |
 | 14 | GPIO9 | | | |
@@ -46,14 +46,14 @@
 | 42 | GPIO37 | DAT1 | SD | |
 | -- | -- | -- | -- | -- |
 | 43 | GPIO38 | CMD | SD | |
-| 44 | MTCK | | | |
-| 45 | MTDO | | | |
+| 44 | MTCK | TCK | JTAG | |
+| 45 | MTDO | TD0 | JTAG | |
 | 46 | VDD3P3_CPU | | | |
-| 47 | MTDI | | | |
-| 48 | MTMS | | | |
-| 49 | U0TXD | | | |
-| 50 | U0RXD | | | |
-| 51 | GPIO45 | Power | MMA + DAC | High = Power on |
+| 47 | MTDI | TDI | JTAG | |
+| 48 | MTMS | TMS | JTAG | |
+| 49 | U0TXD | TX | UART | |
+| 50 | U0RXD | RX | UART | |
+| 51 | GPIO45 | Power | LIS + DAC | High = Power on |
 | 52 | GPIO46 | | | J101 |
 | 53 | XTAL_N | | | |
 | 54 | XTAL_P | | | |
