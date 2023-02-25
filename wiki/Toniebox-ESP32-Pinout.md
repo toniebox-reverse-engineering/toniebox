@@ -18,8 +18,8 @@
 | 15 | GPIO10 | DIN | DAC3100 | |
 | 16 | GPIO11 | BCLK | DAC3100 | |
 | 17 | GPIO12 | WCLK | DAC3100 | |
-| 18 | GPIO13 | | | |
-| 19 | GPIO14 | | | |
+| 18 | GPIO13 | IRQ | TRF7962A | |
+| 19 | GPIO14 | pin11 U4 |  | |
 | 20 | VDD3P3_RTC | | | |
 | 21 | XTAL_32K_P | | | |
 | 22 | XTAL_32K_N | | | |
