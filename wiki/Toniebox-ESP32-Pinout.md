@@ -12,7 +12,7 @@
 | 10 | GPIO5 | I2C_SDA | LIS + DAC |
 | 11 | GPIO6 | I2C_SCL | LIS + DAC | |
 | 12 | GPIO7 | button pressed or charger present |  | wake up? |
-| 13 | GPIO8 | | | |
+| 13 | GPIO8 | R75/R72, 100kΩ/100kΩ divider to L300 220µH, for U300 LM3485, 5V regulator | | |
 | 14 | GPIO9 | | | |
 | -- | -- | -- | -- | -- |
 | 15 | GPIO10 | DIN | DAC3100 | |
@@ -28,7 +28,7 @@
 | 25 | GPIO19 | Red-LED | LED | |
 | 26 | GPIO20 | Ear button | | |
 | 27 | GPIO21 | Ear button | | |
-| 28 | SPICS1 | R75/R72, 100kΩ/100kΩ divider to L300 220µH, for U300 LM3485, 5V regulator | | |
+| 28 | SPICS1 |  | | |
 | -- | -- | -- | -- | -- |
 | 29 | VDD_SPI | | | |
 | 30 | SPIHD | RS | SPI flash | via 100Ω |
