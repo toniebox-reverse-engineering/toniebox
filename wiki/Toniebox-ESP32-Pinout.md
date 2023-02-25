@@ -28,7 +28,7 @@
 | 25 | GPIO19 | Red-LED | LED | |
 | 26 | GPIO20 | Ear button | | |
 | 27 | GPIO21 | Ear button | | |
-| 28 | SPICS1 | | | |
+| 28 | SPICS1 | R75/R72, 100kΩ/100kΩ divider to L300 220µH, for U300 LM3485 | | |
 | -- | -- | -- | -- | -- |
 | 29 | VDD_SPI | | | |
 | 30 | SPIHD | RS | SPI flash | via 100Ω |
