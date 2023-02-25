@@ -26,8 +26,8 @@
 | 23 | GPIO17 | Blue-LED | LED | |
 | 24 | GPIO18 | Green-LED | LED | |
 | 25 | GPIO19 | Red-LED | LED | |
-| 26 | GPIO20 | | | |
-| 27 | GPIO21 | | | |
+| 26 | GPIO20 | Ear button | | |
+| 27 | GPIO21 | Ear button | | |
 | 28 | SPICS1 | | | |
 | -- | -- | -- | -- | -- |
 | 29 | VDD_SPI | | | |
