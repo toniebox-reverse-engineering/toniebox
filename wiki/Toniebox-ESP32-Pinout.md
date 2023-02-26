@@ -53,7 +53,7 @@
 | 48 | MTMS | TMS | JTAG | |
 | 49 | U0TXD | TX | UART | |
 | 50 | U0RXD | RX | UART | |
-| 51 | GPIO45 | Power | LIS + DAC | High = Power on |
+| 51 | GPIO45 | Power | LIS + DAC + Blue-LED | High = Power on |
 | 52 | GPIO46 | | | J101 |
 | 53 | XTAL_N | | | |
 | 54 | XTAL_P | | | |
