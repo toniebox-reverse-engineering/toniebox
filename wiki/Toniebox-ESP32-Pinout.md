@@ -26,9 +26,9 @@
 | 23 | GPIO17 | Blue-LED | LED | |
 | 24 | GPIO18 | Green-LED | LED | |
 | 25 | GPIO19 | Red-LED | LED | |
-| 26 | GPIO20 | Ear button | | |
-| 27 | GPIO21 | Ear button | | |
-| 28 | SPICS1 | RESET (active high) | DAC3100 | |
+| 26 | GPIO20 | Ear left, small | | |
+| 27 | GPIO21 | Ear right, big | | |
+| 28 | GPIO26 / SPICS1 | RESET (active high) | DAC3100 | |
 | -- | -- | -- | -- | -- |
 | 29 | VDD_SPI | | | |
 | 30 | SPIHD | RS | SPI flash | via 100Ω |
@@ -37,8 +37,8 @@
 | 33 | SPIHCLK | SCK | SPI flash | via 22Ω |
 | 34 | SPIQ | SO | SPI flash | via 22Ω |
 | 35 | SPID | SI | SPI flash | via 22Ω |
-| 36 | SPICLK_N | GPIO1 | DAC3100 | |
-| 37 | SPICLK_P | Power | SD | Low = Power on |
+| 36 | GPIO48 / SPICLK_N | GPIO1 | DAC3100 | |
+| 37 | GPIO47 / SPICLK_P | Power | SD | Low = Power on |
 | 38 | GPIO33 | DAT2 | SD | |
 | 39 | GPIO34 | DAT3 | SD | |
 | 40 | GPIO35 | CLK | SD | |
