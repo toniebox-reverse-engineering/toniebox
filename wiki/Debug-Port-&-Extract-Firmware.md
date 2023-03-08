@@ -69,7 +69,7 @@ Please connect the toniebox to your power supply and/or battery. Please double c
 If you have got problems [check out the known problems and fixes](Known-Problems-and-Fixes#cc3200tool-related).
 
 ## Example commands
-You may replace COM3 with the right port on your computer (linux ex. /dev/ttyUSB0). Please add `--reset dtr` to each command (see 6.) if you have RST connected to DTR for auto reset.
+You may replace COM3 with the right port on your computer (linux ex. /dev/ttyUSB0). Please add `--reset dtr` to each command (see 6.) if you have RST connected to DTR for auto reset. In addition, if you got connection problems, you may try to connect SOP2 to the RTS pin directly and add `--sop2 ~rts` to each command.
 
 | | Descriptiion | Command |
 | - | - | - |
