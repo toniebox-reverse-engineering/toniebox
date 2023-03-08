@@ -69,7 +69,7 @@ Please connect the toniebox to your power supply and/or battery. Please double c
 If you have got problems [check out the known problems and fixes](Known-Problems-and-Fixes#cc3200tool-related).
 
 ## Example commands
-You may replace COM3 with the right port on your computer (linux ex. /dev/ttyUSB0). Please add `--reset dtr` to each command (see 6.) if you have RST connected to DTR for auto reset. In addition, if you got connection problems, you may try to connect SOP2 to the RTS pin directly and add `--sop2 ~rts` to each command.
+You may replace COM3 with the right port on your computer (linux ex. /dev/ttyUSB0). Please add `--reset dtr` to each command (see 6.) if you have RST connected to DTR for auto reset. In addition, if you got connection issues, you may try to connect SOP2 to the RTS pin directly and add `--sop2 ~rts` to each command.
 
 | | Descriptiion | Command |
 | - | - | - |
@@ -79,6 +79,7 @@ You may replace COM3 with the right port on your computer (linux ex. /dev/ttyUSB
 | 4 | Extract singe files | `python cc.py -p COM3 read_file /sys/mcuimg.bin ./sys/mcuimg.bin` |
 | 5 | Extract firmware and files | `python cc.py -p COM3 read_flash firmware.dmp read_all_files ./target_dir` |
 | 6 | List files in FatFS with DTR auto reset | `python cc.py -p COM3 --reset dtr list_filesystem` |
+| 7 | List files in FatFS with DTR/RTS auto reset/sop2 | `python cc.py -p COM3 --reset dtr --sop2 ~rts list_filesystem` |
 
 If you are done, either disconnect the box from the charger and battery or remove SOP2 from VCC and connect the Toniebox RST to GND for a moment to reset the box.
 
