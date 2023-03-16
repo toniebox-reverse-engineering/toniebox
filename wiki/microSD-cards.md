@@ -14,6 +14,7 @@ Here you find a list of working microSD cards for the box. It seems to be very p
 ## Samsung
 * 512GB SanDisk Ultra microSDXC I 1 Class 10 U1 A1
 * 32GB Samsung EVO Plus microSDHC I 1
+* Intenso microSDHC 8GB Class 10
 
 # SD card extension
 For convenience a SD extension cable can be used to place the card in a better accessible way. A 25 cm cable is recommend.
