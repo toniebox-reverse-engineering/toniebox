@@ -12,7 +12,7 @@
 | 10 | GPIO5 | I2C_SDA | LIS + DAC |
 | 11 | GPIO6 | I2C_SCL | LIS + DAC | |
 | 12 | GPIO7 | button pressed or charger present |  | wake up (1=no button/no charger) |
-| 13 | GPIO8 | ADC_buck | R75/R72, 100kΩ/100kΩ divider (div 2) U300 LM3485, 5V buck | |
+| 13 | GPIO8 | ADC_charg | R75/R72, 100kΩ/100kΩ divider (div 2) U300 LM3485, 5V buck, charger | |
 | 14 | GPIO9 | ADC_Vbatt | R57/R58, 100kΩ/33kΩ divider (div 4) right before U320 "BW93" boost? | |
 | -- | -- | -- | -- | -- |
 | 15 | GPIO10 | DIN | DAC3100 | |
