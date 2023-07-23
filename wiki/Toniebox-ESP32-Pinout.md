@@ -51,8 +51,8 @@
 | 46 | VDD3P3_CPU | | | |
 | 47 | MTDI | TDI | JTAG | |
 | 48 | MTMS | TMS | JTAG | |
-| 49 | U0TXD | TX | UART | |
-| 50 | U0RXD | RX | UART | |
+| 49 | U0TXD | TX | UART | J103 |
+| 50 | U0RXD | RX | UART | J103 |
 | 51 | GPIO45 | Power | LIS + DAC + Blue-LED | High = Power on |
 | 52 | GPIO46 | | | J101 |
 | 53 | XTAL_N | | | |
