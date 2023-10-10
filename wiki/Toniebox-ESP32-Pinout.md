@@ -26,8 +26,8 @@
 | 23 | GPIO17 | Blue-LED | LED | |
 | 24 | GPIO18 | Green-LED | LED | |
 | 25 | GPIO19 | Red-LED | LED | |
-| 26 | GPIO20 | Ear left, small | | |
-| 27 | GPIO21 | Ear right, big | | |
+| 26 | GPIO20 | Ear left, big | | active low |
+| 27 | GPIO21 | Ear right, small | | active low |
 | 28 | GPIO26 / SPICS1 | RESET (active high) | DAC3100 | |
 | -- | -- | -- | -- | -- |
 | 29 | VDD_SPI | | | |
