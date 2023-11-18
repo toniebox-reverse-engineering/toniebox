@@ -136,7 +136,7 @@ Gets the content by uid and a password. If the content is know it sent back via 
 #### Request-Headers
 | Header | Description | Example |
 |---|---|---|
-| Authorization | Contains the "password" for the content | BD: %content-pass% |
+| Authorization | Contains the "password" for the content | BD %content-pass% |
 #### Response-Headers
 | Header | Description | Example |
 |---|---|---|
