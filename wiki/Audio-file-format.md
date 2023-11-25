@@ -16,7 +16,7 @@ Upon initalization the box extracts the content of the flash-internal sfx.bin in
     00000000\000000*
     00000001\000000*
 
-# Audio file format
+## Audio file format
 In general the audio files are just OGG files with some custom header
 
 So the files are structured like this:
@@ -29,7 +29,7 @@ So the files are structured like this:
     <header_data> protobuf coded info fields like SHA1 hash, audio length, etc
     <audio_data>  Ogg audio file
 
-# Header format
+### Header format
 
 The file header is coded using protobuf and contains these fields:
 
@@ -49,7 +49,7 @@ The encoder produced either multiple variant fields with the same field number, 
 except for files with only one chapter where it generated only a variant field.
 Long story short, the best choice was to build a custom protobuf encoder.
 
-# Audio data
+### Audio data
 
 The container format for the audio data is Ogg, which packetizes the data into so called "pages".
 Pages contain metadata like the time granule (timestamp) for playback, sequence number, checksum etc. and
@@ -72,5 +72,17 @@ But the in experiments used encoder did not have an obvious feature to do this.
 **We have developed a tool called [teddy](https://github.com/toniebox-reverse-engineering/teddy) to encode and decode these files.**
 
 # Audio file extraction with Linux OS
-- Remove Header of the file with ´dd bs=4092 skip=1 if=500304E0 of=trim.ogg´
-- then just use ffmpeg to convert it into mp3 ´ffmpeg -i trim.ogg done.mp3´
+
+Linux users can follow the following procedure to get mp3 files from the device:
+
+this procedure does not damage the device but may invalidate the warranty!!!
+
+1. Take box apart and extract the SD card (carefully!)
+2. Use card reader to copy all the files from the CONTENT folder on the card to your PC.
+3. Replace SD card (carefully!)
+4. Put box back together and make sure it works
+5. Go through all the folders in the extracted content and in each
+    - `mv {name of file}  audio.ton` this just renames the file to something more useful
+    - `dd bs=4092 skip=1 if=audio.ton of=trim.ogg` this removes the tonies header from the file and leaves plain ogg data
+    - `ffmpeg -i trim.ogg done.mp3` this extracts the ogg format audio and reencodes it to a local file called done.mp3
+6. Now you can test that done.mp3 plays, which it should if the header size is not something unusual. You can change the header size in the `dd` command if needed (the bs parameter). Note that I found a header size of 4096 on a creative tonie vs 4092 on standard ones.
